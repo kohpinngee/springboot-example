@@ -2,11 +2,8 @@ package com.pin.app;
 
 import java.util.List;
 
-import javax.ws.rs.core.UriBuilder;
+import javax.annotation.Resource;
 
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,17 +16,13 @@ import com.pin.api.PostResource;
 @EnableAutoConfiguration
 public class PostController {
 
+	@Resource
+	PostResource postResource;
+	
 	@RequestMapping("/posts")
 	@ResponseBody()
 	List<Post> getAllPosts() {
 
-		final String path = "https://jsonplaceholder.typicode.com";
-
-		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target(UriBuilder.fromPath(path));
-		PostResource proxy = target.proxy(PostResource.class);
-
-		// GET
-		return proxy.getAllPosts();
+		return postResource.getAllPosts();
 	}
 }
